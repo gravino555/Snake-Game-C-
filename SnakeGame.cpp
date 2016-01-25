@@ -10,29 +10,30 @@ const int height = 20;
 int x, y, fruitX, fruitY, score;
 enum eDirection { STOP = 0, LEFT, RIGHT, UP, DOWN };
 eDirection dir;
-// tail
+// tail arrays
 int tailX [100], tailY [100];
 int nTail; // specifies length of tail
 // functions for game making
+
 void Setup() {
-gameOver = false;
-dir = STOP;
-x = width/2;
-y = height/2;
-fruitX = rand() % width;
-fruitY = rand() % height;
-score = 0;
+    gameOver = false; // beginning of the game
+    dir = STOP;
+    x = width/2; // this centers the head of the snake at the beginning of the game
+    y = height/2; // ^^
+    fruitX = rand() % width; // these two next lines distributes the fruits at random locations inside the map
+    fruitY = rand() % height; // ^^
+    score = 0; // score initialized at 0
 }
 
 void Draw() {
-system("cls");
+    system("cls"); // clears the screen
+// following code draws the map as well as the fruit, snake and its tail.
+    for (int i = 0; i < width + 2; i++)
+        cout << "#";
+        cout << endl;
 
-for (int i = 0; i < width + 2; i++)
-    cout << "#";
-cout << endl;
-
-for (int i = 0; i < height; i++) {
-    for (int j = 0; j < width; j++){
+    for (int i = 0; i < height; i++) {
+     for (int j = 0; j < width; j++){
         if (j == 0)
             cout << "#";
             if ( i == y && j == x)
@@ -40,7 +41,7 @@ for (int i = 0; i < height; i++) {
             else if (i == fruitY && j == fruitX)
                 cout << "F";
             else {
-                    bool print = false;
+                bool print = false;
                     for (int k = 0; k < nTail; k++) {
                         if (tailX[k] == j && tailY[k] == i) {
                             cout << "x";
@@ -58,34 +59,36 @@ for (int i = 0; i < height; i++) {
 
 
 for (int i = 0; i < width + 2; i++)
-cout << "#";
-cout << endl;
-cout << "Score: " << score << endl; // displays the score
+    cout << "#";
+    cout << endl;
+    cout << "Score: " << score << endl; // displays the score
 }
 
 void Input() {
-if (_kbhit()){
-    switch (_getch()) {
-case 'a':
-    dir = LEFT;
-    break;
-case 'd':
-    dir = RIGHT;
-    break;
-case 'w':
-    dir = UP;
-    break;
-case 's':
-    dir = DOWN;
-    break;
-case 'x':
-    gameOver = true;
-    break;
+    // input when playing.
+    if (_kbhit()){
+        switch (_getch()) {
+    case 'a':
+        dir = LEFT;
+        break;
+    case 'd':
+        dir = RIGHT;
+        break;
+    case 'w':
+        dir = UP;
+        break;
+    case 's':
+        dir = DOWN;
+        break;
+    case 'x':
+        gameOver = true;
+        break;
+        }
     }
-}
 }
 
 void Logic() {
+    // this is all logic in game, I.E : what happens when head of snake hits wall (game over).
     int prevX = tailX[0];
     int prevY = tailY[0];
     int prev2X, prev2Y;
@@ -99,32 +102,33 @@ void Logic() {
         prevX = prev2X;
         prevY = prev2Y;
         }
-switch (dir) {
-case LEFT:
-    x--;
-    break;
-case RIGHT:
-    x++;
-    break;
-case UP:
-    y--;
-    break;
-case DOWN:
-    y++;
-    break;
-default:
-        break;
-}
-if (x > width || x < 0 || y > height || y < 0)
-    gameOver = true; // if snake hits edge of map, terminates the app
-for (int i = 0; i < nTail; i++)
-    if (tailX[i] == x && tailY[i] == y)
-    gameOver = true; // if head hits tail, game over
-if ( x == fruitX && y == fruitY) {
-    score += 10 ; // Everytime the snake eats the fruit, the score will go up 10 points
-    fruitX = rand() % width;
-    fruitY = rand() % height; // enables us to eat the fruit
-    nTail++; // if we eat fruit, tail grows by 1
+    switch (dir) {
+    // describes what left, right, up , down means to the program.
+    case LEFT:
+      x--;
+     break;
+    case RIGHT:
+       x++;
+      break;
+    case UP:
+      y--;
+      break;
+    case DOWN:
+       y++;
+      break;
+    default:
+      break;
+    }
+    if (x > width || x < 0 || y > height || y < 0)
+        gameOver = true; // if snake hits edge of map, terminates the app
+    for (int i = 0; i < nTail; i++)
+     if (tailX[i] == x && tailY[i] == y)
+         gameOver = true; // if head hits tail, game over
+    if ( x == fruitX && y == fruitY) {
+     score += 10 ; // Everytime the snake eats the fruit, the score will go up 10 points
+     fruitX = rand() % width;
+     fruitY = rand() % height; // enables us to eat the fruit
+     nTail++; // if we eat fruit, tail grows by 1
 }
 
 }
@@ -136,7 +140,7 @@ int main()
         Draw();
         Input();
         Logic();
-        Sleep(50); // slows game down
+        Sleep(60); // slows game down
     }
     return 0;
 }
