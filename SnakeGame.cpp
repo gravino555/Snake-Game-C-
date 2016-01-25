@@ -27,6 +27,7 @@ void Setup() {
 
 void Draw() {
     system("cls"); // clears the screen
+    cout << "Welcome to Snake!!!!" << endl;
 // following code draws the map as well as the fruit, snake and its tail.
     for (int i = 0; i < width + 2; i++)
         cout << "#";
